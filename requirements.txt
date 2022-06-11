@@ -1,0 +1,15 @@
+asgiref==3.5.0
+certifi==2022.5.18.1
+charset-normalizer==2.0.12
+Django==4.0.4
+idna==3.3
+numpy==1.22.2
+pandas==1.4.1
+prettytable==3.1.1
+psycopg2==2.9.3
+python-dateutil==2.8.2
+pytz==2021.3
+six==1.16.0
+sqlparse==0.4.2
+urllib3==1.26.9
+wcwidth==0.2.5
