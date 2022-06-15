@@ -1,3 +1,5 @@
+from contextlib import nullcontext
+from distutils.command.upload import upload
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
 from django.conf import settings
@@ -16,9 +18,11 @@ class UserAccountManager(BaseUserManager):
 
         return user
 
-    def create_super_user(self):
+    def create_superuser(self, email, password=None, **extra_fields):
         email = self.normalize_email(email)
         user = self.model(email=email, **extra_fields)
+
+        user.set_password(password)
 
         user.is_superuser = True
         user.is_staff = True
@@ -40,7 +44,9 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
     is_active = models.BooleanField(default=True)
-    account_type = models.PositiveSmallIntegerField(choices=ACCOUNT_ROLE_CHOICES)
+    is_staff = models.BooleanField(default=False)
+    account_type = models.PositiveSmallIntegerField(choices=ACCOUNT_ROLE_CHOICES, null=True)
+    proflile_picture = models.ImageField(upload_to='profile_pictures/', null=True)
 
     objects = UserAccountManager()
 
