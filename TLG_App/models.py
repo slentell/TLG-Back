@@ -4,10 +4,11 @@ from auth_app.models import UserAccount
 
 # Create your models here.
 class Team(models.Model):
+   
     # Choice Lists
     GENDER_CHOICES = [
-        ('M', 'Male'),
-        ('F', 'Female')
+        ("M", "Boy's"),
+        ("F", "Girl's")
     ] 
 
     team_name = models.CharField(max_length=255)
