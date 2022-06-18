@@ -8,14 +8,17 @@ coreapi==2.3.3
 coreschema==0.0.4
 cryptography==37.0.2
 defusedxml==0.7.1
+distlib==0.3.4
 Django==4.0.4
 django-cors-headers==3.13.0
 django-environ==0.8.1
 django-storages==1.12.3
 django-templated-mail==1.1.1
 djangorestframework==3.13.1
-djangorestframework-simplejwt==4.8.0
-djoser==2.1.0
+djangorestframework-simplejwt==5.2.0
+djoser @ git+https://github.com/sunscrapers/djoser.git@ede06f257950705bbf6ded47d3c6daf11eb36fe3
+filelock==3.7.1
+gunicorn==20.1.0
 idna==3.3
 itypes==1.2.0
 Jinja2==3.1.2
@@ -25,6 +28,8 @@ numpy==1.22.2
 oauthlib==3.2.0
 pandas==1.4.1
 Pillow==9.1.1
+pipenv==2022.6.7
+platformdirs==2.5.2
 prettytable==3.1.1
 psycopg2==2.9.3
 pycparser==2.21
@@ -41,4 +46,6 @@ social-auth-core==4.3.0
 sqlparse==0.4.2
 uritemplate==4.1.1
 urllib3==1.26.9
+virtualenv==20.14.1
+virtualenv-clone==0.5.7
 wcwidth==0.2.5
