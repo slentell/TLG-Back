@@ -6,10 +6,6 @@ class PostList(generics.ListCreateAPIView):
     queryset = Posts.objects.all()
     serializer_class = PostSerializer
 
-# # Create your views here.
-# def test_view():
-#     pass
-
 class TeamViewSet(viewsets.ModelViewSet):
     queryset = Team.objects.all()
     serializer_class = TeamSerializer
@@ -37,6 +33,7 @@ class LiftHistoryViewSet(viewsets.ModelViewSet):
         serializer = LiftHistorySerializer(queryset, many=True)
 
         return response.Response(serializer.data)
+
 
 class MaxLiftViewSet(viewsets.ModelViewSet):
     queryset = MaxLift.objects.all()
