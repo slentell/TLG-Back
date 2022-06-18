@@ -192,10 +192,10 @@ DJOSER = {
 
 AUTH_USER_MODEL = 'auth_app.UserAccount'
 
-# SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = ''
-# SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = ''
-# SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = ['https://www.googleapis.com/auth/userinfo.email', 'https://www.googleapis.com/auth/userinfo.profile', 'openid']
-# SOCIAL_AUTH_GOOGLE_OAUTH2_EXTRA_DATA = ['first_name', 'last_name']
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = env('GOOGLE_CLIENT_ID')
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = env('GOOGLE_SECRET')
+SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = ['https://www.googleapis.com/auth/userinfo.email', 'https://www.googleapis.com/auth/userinfo.profile', 'openid']
+SOCIAL_AUTH_GOOGLE_OAUTH2_EXTRA_DATA = ['first_name', 'last_name']
 
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
@@ -203,3 +203,6 @@ AWS_ACCESS_KEY_ID=env('AWS_ACCESS_KEY')
 AWS_SECRET_ACCESS_KEY=env('AWS_SECRET_KEY')
 AWS_STORAGE_BUCKET_NAME="through-the-lifting-glass"
 # AWS_QUERYSTRING_AUTH = False
+
+CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_CREDENTIALS = True
