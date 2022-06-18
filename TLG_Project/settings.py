@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 from datetime import timedelta
 from pathlib import Path
 import environ
+import django_heroku
 
 # Initialise environment variables
 env = environ.Env()
@@ -206,3 +207,5 @@ AWS_STORAGE_BUCKET_NAME="through-the-lifting-glass"
 
 CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = True
+
+django_heroku.settings(locals())
