@@ -1,1 +1,1 @@
-web: gunicorn TLG_project.wsgi
+web: gunicorn TLG_Project.wsgi
