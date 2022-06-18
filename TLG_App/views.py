@@ -1,4 +1,4 @@
-from rest_framework import generics, viewsets
+from rest_framework import generics, viewsets, response
 from .models import Posts, Team, Athlete, LiftHistory, MaxLift
 from .serializers import PostSerializer, TeamSerializer, AthleteSerializer, LiftHistorySerializer, MaxLiftSerializer
 
@@ -25,6 +25,19 @@ class LiftHistoryViewSet(viewsets.ModelViewSet):
     serializer_class = LiftHistorySerializer
     http_method_names = ['get', 'post', 'options', 'put', 'delete',]
 
+    def list(self, request):
+        teamId = request.query_params['team']
+        teamLifts = LiftHistory.objects.filter(athlete__athlete__team_id=teamId)
+        serializer = LiftHistorySerializer(teamLifts, many=True)
+        
+        return response.Response(serializer.data)
+
+    def retrieve(self, request, pk):
+        queryset = LiftHistory.objects.filter(athlete__athlete=pk)
+        serializer = LiftHistorySerializer(queryset, many=True)
+
+        return response.Response(serializer.data)
+
 class MaxLiftViewSet(viewsets.ModelViewSet):
     queryset = MaxLift.objects.all()
     serializer_class = MaxLiftSerializer
@@ -34,4 +47,6 @@ class PostsViewSet(viewsets.ModelViewSet):
     queryset = Posts.objects.all()
     serializer_class = PostSerializer
     http_method_names = ['get', 'post', 'options', 'put','delete',]
+
+
 
