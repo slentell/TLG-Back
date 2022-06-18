@@ -6,6 +6,18 @@ class PostList(generics.ListCreateAPIView):
     queryset = Posts.objects.all()
     serializer_class = PostSerializer
 
+    def create(self, request):
+        serializer = self.get_serializer(
+        data = {
+            'author': request.user.pk,
+            'title': request.data['title'], 
+            'content': request.data['content'],
+            'image': request.data['image'] ,
+        })
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        return response.Response(serializer.data)
+
 class TeamViewSet(viewsets.ModelViewSet):
     queryset = Team.objects.all()
     serializer_class = TeamSerializer
