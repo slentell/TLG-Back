@@ -32,7 +32,7 @@ SECRET_KEY = 'django-insecure-vdp*jat2f&#3fyrqnha3f4740pb^m95!z+l4-s2i^(#vs&3ph#
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['throughtheliftingglass.herokuapp.com']
+ALLOWED_HOSTS = ['throughtheliftingglass.herokuapp.com', 'http://localhost:8000']
 
 
 # Application definition

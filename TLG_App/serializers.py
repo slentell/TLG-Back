@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from .models import Posts, Team, Athlete, MaxLift, LiftHistory
 from django.db.models import Max
+from auth_app.models import UserAccount
 
 
 
@@ -49,6 +50,8 @@ class LiftHistorySerializer(serializers.ModelSerializer):
             return None
 
 class PostSerializer(serializers.ModelSerializer):
+
     class Meta:
-        fields = ('id', 'title', 'content', 'image')
+        fields = ('id', 'title', 'content', 'image', 'author')
         model = Posts
+     
