@@ -46,7 +46,7 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     account_type = models.PositiveSmallIntegerField(choices=ACCOUNT_ROLE_CHOICES, null=True)
-    proflile_picture = models.ImageField(upload_to='profile_pictures/', null=True)
+    profile_picture = models.ImageField(upload_to='profile_pictures/', null=True)
 
     objects = UserAccountManager()
 
