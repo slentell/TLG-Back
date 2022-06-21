@@ -209,4 +209,6 @@ AWS_STORAGE_BUCKET_NAME="through-the-lifting-glass"
 CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = True
 
+SESSION_COOKIE_SAMESITE = None
+
 django_heroku.settings(locals())
