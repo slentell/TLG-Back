@@ -16,16 +16,20 @@ class PostsViewSet(viewsets.ModelViewSet):
         serializer_class = PostSerializer
 
         if self.request.method == "POST":
+            print('in the if')
             author = self.request.user.pk
             title = request.data.get('title')
             content = request.data.get('content')
             image = request.data.get('image')
+            if image == '':
+                image = None
             data = {
                 'author': author,
                 'title': title,
                 'content': content,
                 'image': image,
             }
+            print(data)
             serializer = serializer_class(data=data, partial=True)
 
             if serializer.is_valid():
