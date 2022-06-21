@@ -4,7 +4,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import TokenAuthentication
 from .models import Posts, Team, Athlete, LiftHistory, MaxLift
 from .serializers import PostSerializer, TeamSerializer, AthleteSerializer, LiftHistorySerializer, MaxLiftSerializer
-from datetime import date
+
 
 class PostsViewSet(viewsets.ModelViewSet):
     queryset = Posts.objects.all()
@@ -20,15 +20,15 @@ class PostsViewSet(viewsets.ModelViewSet):
             title = request.data.get('title')
             content = request.data.get('content')
             image = request.data.get('image')
-            post_date = date.today()
+    
             if image == '':
                 image = None
             data = {
                 'author': author,
                 'title': title,
                 'content': content,
-                'image': image,
-                'date' : post_date
+                'image': image
+               
             }
             serializer = serializer_class(data=data, partial=True)
 
