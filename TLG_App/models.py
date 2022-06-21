@@ -58,7 +58,7 @@ class Athlete(models.Model):
     gender = models.CharField(max_length=1, choices=GENDER_CHOICES)
     weight = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(1400)])
     dob = models.DateField(max_length=8)
-    team = models.ForeignKey(Team, on_delete=models.CASCADE, related_name='teammates')
+    team = models.ForeignKey(Team, on_delete=models.CASCADE, related_name='teammates', null=True)
     weightclass = models.CharField(max_length=255, default=return_weightclass(gender, weight)) 
 
 # Future DB for Lift DB for building/logging workout
@@ -84,3 +84,8 @@ class Posts(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class ImageGallery(models.Model):
+    author = models.ForeignKey(UserAccount, on_delete=models.CASCADE)
+    image = models.ImageField(upload_to='image_gallery')
