@@ -4,6 +4,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import TokenAuthentication
 from .models import Posts, Team, Athlete, LiftHistory, MaxLift
 from .serializers import PostSerializer, TeamSerializer, AthleteSerializer, LiftHistorySerializer, MaxLiftSerializer
+from datetime import date
 
 class PostsViewSet(viewsets.ModelViewSet):
     queryset = Posts.objects.all()
@@ -11,16 +12,15 @@ class PostsViewSet(viewsets.ModelViewSet):
     filterset_fields=['author']
     http_method_names = ['get', 'post', 'options', 'put','delete',]
 
-
     def create(self, request):
         serializer_class = PostSerializer
 
         if self.request.method == "POST":
-            print('in the if')
             author = self.request.user.pk
             title = request.data.get('title')
             content = request.data.get('content')
             image = request.data.get('image')
+            post_date = date.today()
             if image == '':
                 image = None
             data = {
@@ -28,8 +28,8 @@ class PostsViewSet(viewsets.ModelViewSet):
                 'title': title,
                 'content': content,
                 'image': image,
+                'date' : post_date
             }
-            print(data)
             serializer = serializer_class(data=data, partial=True)
 
             if serializer.is_valid():
@@ -38,9 +38,6 @@ class PostsViewSet(viewsets.ModelViewSet):
             else:
                 return Response({'error' : serializer.errors}, status=400 )
     
-
-
-   
 
 class TeamViewSet(viewsets.ModelViewSet):
     queryset = Team.objects.all()
