@@ -39,7 +39,7 @@ class LiftHistorySerializer(serializers.ModelSerializer):
         return maxLift
 
     def checkIfNewMax(self, lift, maxLift):
-
+        
         if maxLift['weight__max'] < lift.weight:
             update_values = {'max_lift' : lift}
             maxObj, created = MaxLift.objects.update_or_create(athlete = lift.athlete, defaults=update_values)
