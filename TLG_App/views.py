@@ -2,8 +2,8 @@ from rest_framework import generics, viewsets, response
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import TokenAuthentication
-from .models import Posts, Team, Athlete, LiftHistory, MaxLift
-from .serializers import PostSerializer, TeamSerializer, AthleteSerializer, LiftHistorySerializer, MaxLiftSerializer
+from .models import ImageGallery, Posts, Team, Athlete, LiftHistory, MaxLift
+from .serializers import ImageGallerySerializer, PostSerializer, TeamSerializer, AthleteSerializer, LiftHistorySerializer, MaxLiftSerializer
 
 
 class PostsViewSet(viewsets.ModelViewSet):
@@ -71,6 +71,11 @@ class LiftHistoryViewSet(viewsets.ModelViewSet):
 class MaxLiftViewSet(viewsets.ModelViewSet):
     queryset = MaxLift.objects.all()
     serializer_class = MaxLiftSerializer
+    http_method_names = ['get', 'post', 'options', 'put','delete',]
+
+class ImageGalleryViewSet(viewsets.ModelViewSet):
+    queryset = ImageGallery.objects.all()
+    serializer_class = ImageGallerySerializer
     http_method_names = ['get', 'post', 'options', 'put','delete',]
 
 # class PostsViewSet(viewsets.ModelViewSet):
