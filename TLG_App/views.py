@@ -79,6 +79,29 @@ class LiftHistoryViewSet(viewsets.ModelViewSet):
     serializer_class = LiftHistorySerializer
     http_method_names = ['get', 'post', 'options', 'put', 'delete',]
 
+    def create(self, request):
+            serializer_class = LiftHistorySerializer
+
+            if self.request.method == "POST":
+                athlete = self.request.user.pk
+                lift = request.data.get('lift')
+                weight = request.data.get('weight')
+                date_of_lift = request.data.get('date_of_lift')
+
+                data = {
+                    'athlete': athlete,
+                    'lift': lift,
+                    'weight': weight,
+                    'date_of_lift': date_of_lift,
+                }
+                serializer = serializer_class(data=data, partial=True)
+
+                if serializer.is_valid():
+                    serializer.save()
+                    return Response({'status' : 'ok'}, status = 200)
+                else:
+                    return Response({'error' : serializer.errors}, status=400 )
+
     def list(self, request):
         teamId = request.query_params['team']
         teamLifts = LiftHistory.objects.filter(athlete__athlete__team_id=teamId)
