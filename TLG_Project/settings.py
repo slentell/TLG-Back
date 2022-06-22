@@ -14,6 +14,7 @@ from datetime import timedelta
 from pathlib import Path
 import environ
 import django_heroku
+from django.conf.locale.en import formats as en_formats
 
 # Initialise environment variables
 env = environ.Env()
@@ -22,6 +23,8 @@ environ.Env.read_env()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# change date format
+en_formats.DATE_FORMAT = '%d-%m-%y'
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/

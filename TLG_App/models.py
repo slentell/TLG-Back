@@ -76,11 +76,12 @@ class MaxLift(models.Model):
     max_lift = models.ForeignKey(LiftHistory, on_delete=models.CASCADE)
 
 class Posts(models.Model):
+    
     author = models.ForeignKey(UserAccount, on_delete=models.CASCADE)
     title = models.CharField(max_length=255)
     content = models.TextField()
     image = models.ImageField(upload_to='post_pictures', blank=True, null=True)
-
+    date = models.DateField(auto_now_add=True, null=True)
 
     def __str__(self):
         return self.title

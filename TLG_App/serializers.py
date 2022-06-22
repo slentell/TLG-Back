@@ -50,6 +50,6 @@ class LiftHistorySerializer(serializers.ModelSerializer):
 class PostSerializer(serializers.ModelSerializer):
 
     class Meta:
-        fields = ('id', 'title', 'content', 'image', 'author')
+        fields = ('id', 'title', 'content', 'image', 'author', 'date')
         model = Posts
      
