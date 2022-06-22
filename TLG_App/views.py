@@ -44,6 +44,31 @@ class TeamViewSet(viewsets.ModelViewSet):
     serializer_class = TeamSerializer
     http_method_names = ['get', 'post', 'put', 'options', 'delete',]
 
+    def create(self, request):
+        serializer_class = TeamSerializer
+
+        if self.request.method == "POST":
+            coach = self.request.user.pk
+            team_name = request.data.get('team_name')
+            primary_color = request.data.get('primary_color')
+            secondary_color = request.data.get('secondary_color')
+            gender = request.data.get('gender')
+
+            data = {
+                'coach': coach,
+                'team_name': team_name,
+                'primary_color': primary_color,
+                'secondary_color': secondary_color,
+                'gender': gender
+            }
+            serializer = serializer_class(data=data, partial=True)
+
+            if serializer.is_valid():
+                serializer.save()
+                return Response({'status' : 'ok'}, status = 200)
+            else:
+                return Response({'error' : serializer.errors}, status=400 )
+                
 class AthleteViewSet(viewsets.ModelViewSet):
     queryset = Athlete.objects.all()
     serializer_class = AthleteSerializer
