@@ -1,3 +1,4 @@
+from requests import request
 from rest_framework import generics, viewsets, response
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
@@ -125,6 +126,28 @@ class ImageGalleryViewSet(viewsets.ModelViewSet):
     queryset = ImageGallery.objects.all()
     serializer_class = ImageGallerySerializer
     http_method_names = ['get', 'post', 'options', 'put','delete',]
+
+    def create(self, request):
+        print("LETS UPLOAD AN IMAGE")
+        serializer_class = ImageGallerySerializer
+
+        if self.request.method == "POST":
+            author = self.request.user.pk
+            image = request.data.get('image')
+
+            data = {
+                'author': author,
+                'image': image
+            }
+            print(image)
+
+            serializer = serializer_class(data=data)
+
+            if serializer.is_valid():
+                serializer.save()
+                return Response({'status' : 'ok'}, status = 200)
+            else:
+                return Response({'error' : serializer.errors}, status=400 )
 
 # class PostsViewSet(viewsets.ModelViewSet):
 #     queryset = Posts.objects.all()
