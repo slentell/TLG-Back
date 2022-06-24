@@ -210,4 +210,6 @@ CORS_ALLOW_CREDENTIALS = True
 
 SESSION_COOKIE_SAMESITE = None
 
+
+
 django_heroku.settings(locals())
