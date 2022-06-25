@@ -167,6 +167,9 @@ class MaxLiftViewSet(viewsets.ModelViewSet):
     serializer_class = MaxLiftSerializer
     http_method_names = ['get', 'post', 'options', 'put','delete',]
 
+    def get_queryset(self):
+        return MaxLift.objects.select_related('max_lift', 'athlete').all()
+
 class ImageGalleryViewSet(viewsets.ModelViewSet):
     queryset = ImageGallery.objects.all()
     serializer_class = ImageGallerySerializer
