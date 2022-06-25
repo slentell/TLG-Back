@@ -145,6 +145,7 @@ class LiftHistoryViewSet(viewsets.ModelViewSet):
                     return Response({'error' : serializer.errors}, status=400 )
 
     def list(self, request):
+        print('inside lift')
         teamId = request.query_params['team']
         teamLifts = LiftHistory.objects.filter(athlete__athlete__team_id=teamId)
         serializer = LiftHistorySerializer(teamLifts, many=True)
@@ -152,9 +153,9 @@ class LiftHistoryViewSet(viewsets.ModelViewSet):
         return response.Response(serializer.data)
 
     def retrieve(self, request, pk):
-        queryset = LiftHistory.objects.filter(athlete__athlete=pk)
+        queryset = LiftHistory.objects.filter(athlete__id=pk)
         serializer = LiftHistorySerializer(queryset, many=True)
-
+        
         return response.Response(serializer.data)
 
 
