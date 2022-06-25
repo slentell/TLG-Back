@@ -1,3 +1,4 @@
+from venv import create
 from requests import request
 from rest_framework import generics, viewsets, response
 from rest_framework.response import Response
@@ -5,7 +6,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import TokenAuthentication
 from .models import ImageGallery, Posts, Team, Athlete, LiftHistory, MaxLift
 from .serializers import ImageGallerySerializer, PostSerializer, TeamSerializer, AthleteSerializer, LiftHistorySerializer, MaxLiftSerializer
-
+import json
 
 class PostsViewSet(viewsets.ModelViewSet):
     queryset = Posts.objects.all()
@@ -72,7 +73,9 @@ class TeamViewSet(viewsets.ModelViewSet):
     
     def get_queryset(self):
         coach_acct = self.request.user
-        return Team.objects.filter(coach=coach_acct)
+        if coach_acct.account_type == 2:
+            return Team.objects.filter(coach=coach_acct)
+        return Team.objects.all()
 
 class AthleteViewSet(viewsets.ModelViewSet):
     queryset = Athlete.objects.all()
@@ -84,15 +87,13 @@ class AthleteViewSet(viewsets.ModelViewSet):
 
         if self.request.method == "POST":
             print("I'm here")
-            print(request.data)
             athlete = self.request.user.pk
             grade = request.data.get('grade')
             gender = request.data.get('gender')
             dob = request.data.get('dob')
             weight = request.data.get('weight')
+            team_id = request.data.get('team')
             weightclass = Athlete.return_weightclass(gender=gender, weight_input=weight)
-            print("to the data!")
-            
 
             data = {
                 'athlete' : athlete,
@@ -100,10 +101,10 @@ class AthleteViewSet(viewsets.ModelViewSet):
                 'gender': gender,
                 'dob': dob,
                 'weight': weight,
-                'weightclass': weightclass
+                'weightclass': weightclass,
+                'team': team_id
             }
             print(data)
-            
 
             serializer = serializer_class(data=data, partial=True)
             print("got serialized")

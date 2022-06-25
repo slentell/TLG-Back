@@ -7,7 +7,7 @@ from auth_app.serializer import UserCreateSerializer
 
 class TeamSerializer(serializers.ModelSerializer):
     class Meta:
-        fields = ('team_name', 'coach', 'primary_color', 'secondary_color', 'gender')
+        fields = ('id', 'team_name', 'coach', 'primary_color', 'secondary_color', 'gender')
         model = Team
 
 class AthleteSerializer(serializers.ModelSerializer):
