@@ -3,6 +3,7 @@ from rest_framework import serializers
 from .models import ImageGallery, Posts, Team, Athlete, MaxLift, LiftHistory
 from django.db.models import Max
 from auth_app.models import UserAccount
+from auth_app.serializer import UserCreateSerializer
 
 class TeamSerializer(serializers.ModelSerializer):
     class Meta:
@@ -14,10 +15,6 @@ class AthleteSerializer(serializers.ModelSerializer):
         fields = ('athlete', 'grade', 'gender', 'weight', 'dob', 'team', 'weightclass')
         model = Athlete
 
-class MaxLiftSerializer(serializers.ModelSerializer):
-    class Meta:
-        fields = ('athlete', 'max_lift')
-        model = MaxLift
 
 class LiftHistorySerializer(serializers.ModelSerializer):
 
@@ -67,6 +64,12 @@ class LiftHistorySerializer(serializers.ModelSerializer):
             self.bellRinger = False
             return False
 
+class MaxLiftSerializer(serializers.ModelSerializer):
+    athlete = UserCreateSerializer()
+    max_lift = LiftHistorySerializer()
+    class Meta:
+        fields = ('athlete', 'max_lift')
+        model = MaxLift
 class PostSerializer(serializers.ModelSerializer):
 
     class Meta:
