@@ -1,3 +1,4 @@
+from requests import request
 from rest_framework import generics, viewsets, response
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
@@ -68,11 +69,52 @@ class TeamViewSet(viewsets.ModelViewSet):
                 return Response({'status' : 'ok'}, status = 200)
             else:
                 return Response({'error' : serializer.errors}, status=400 )
-                
+    
+    def get_queryset(self):
+        coach_acct = self.request.user
+        return Team.objects.filter(coach=coach_acct)
+
 class AthleteViewSet(viewsets.ModelViewSet):
     queryset = Athlete.objects.all()
     serializer_class = AthleteSerializer
     http_method_names = ['get', 'post', 'put', 'options', 'delete',]
+
+    def create(self, request):
+        serializer_class = AthleteSerializer
+
+        if self.request.method == "POST":
+            print("I'm here")
+            print(request.data)
+            athlete = self.request.user.pk
+            grade = request.data.get('grade')
+            gender = request.data.get('gender')
+            dob = request.data.get('dob')
+            weight = request.data.get('weight')
+            weightclass = Athlete.return_weightclass(gender=gender, weight_input=weight)
+            print("to the data!")
+            
+
+            data = {
+                'athlete' : athlete,
+                'grade': grade,
+                'gender': gender,
+                'dob': dob,
+                'weight': weight,
+                'weightclass': weightclass
+            }
+            print(data)
+            
+
+            serializer = serializer_class(data=data, partial=True)
+            print("got serialized")
+            if serializer.is_valid():
+
+                print("is valid")
+                serializer.save()
+                return Response({'status' : 'ok'}, status = 200)
+            else:
+                return Response({'error' : serializer.errors}, status=400 )
+
 
 class LiftHistoryViewSet(viewsets.ModelViewSet):
     queryset = LiftHistory.objects.all()
@@ -129,6 +171,28 @@ class ImageGalleryViewSet(viewsets.ModelViewSet):
     queryset = ImageGallery.objects.all()
     serializer_class = ImageGallerySerializer
     http_method_names = ['get', 'post', 'options', 'put','delete',]
+
+    def create(self, request):
+        print("LETS UPLOAD AN IMAGE")
+        serializer_class = ImageGallerySerializer
+
+        if self.request.method == "POST":
+            author = self.request.user.pk
+            image = request.data.get('image')
+
+            data = {
+                'author': author,
+                'image': image
+            }
+            print(image)
+
+            serializer = serializer_class(data=data)
+
+            if serializer.is_valid():
+                serializer.save()
+                return Response({'status' : 'ok'}, status = 200)
+            else:
+                return Response({'error' : serializer.errors}, status=400 )
 
 # class PostsViewSet(viewsets.ModelViewSet):
 #     queryset = Posts.objects.all()

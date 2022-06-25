@@ -182,7 +182,6 @@ DJOSER = {
     'SEND_ACTIVATION_EMAIL': True,
     'SOCIAL_AUTH_TOKEN_STRATEGY': 'djoser.social.token.jwt.TokenStrategy',
     'SOCIAL_AUTH_ALLOWED_REDIRECT_URIS': ['http://localhost:8000/google', 'http://localhost:3000', 'http://localhost:3000/login'],
-    'SOCIAL_AUTH_FIELDS_STORED_IN_SESSION': ['state'],
     'SERIALIZERS': {
         'user_create': 'auth_app.serializer.UserCreateSerializer',
         'user': 'auth_app.serializer.UserCreateSerializer',
@@ -209,5 +208,7 @@ CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = True
 
 SESSION_COOKIE_SAMESITE = None
+
+
 
 django_heroku.settings(locals())
