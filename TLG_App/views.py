@@ -125,8 +125,7 @@ class LiftHistoryViewSet(viewsets.ModelViewSet):
 
             serializer_class = LiftHistorySerializer
             if self.request.method == "POST":
-                # athlete = self.request.user.pk
-                athlete = 2
+                athlete = self.request.user.pk
                 lift = request.data.get('lift')
                 weight = request.data.get('weight')
                 date_of_lift = request.data.get('date_of_lift')
