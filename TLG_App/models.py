@@ -42,7 +42,6 @@ class Athlete(models.Model):
     
         # put this in an if based on gender
 
-=======
         # weight_classes = {
         #     range(0, 101) : '101',
         #     range(102, 110) : '110',
