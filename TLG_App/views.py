@@ -28,7 +28,7 @@ class PostsViewSet(viewsets.ModelViewSet):
                 'title': title,
                 'content': content,
                 'image': image
-               
+            
             }
             serializer = serializer_class(data=data, partial=True)
 
@@ -80,10 +80,11 @@ class LiftHistoryViewSet(viewsets.ModelViewSet):
     http_method_names = ['get', 'post', 'options', 'put', 'delete',]
 
     def create(self, request):
-            serializer_class = LiftHistorySerializer
 
+            serializer_class = LiftHistorySerializer
             if self.request.method == "POST":
-                athlete = self.request.user.pk
+                # athlete = self.request.user.pk
+                athlete = 2
                 lift = request.data.get('lift')
                 weight = request.data.get('weight')
                 date_of_lift = request.data.get('date_of_lift')
@@ -98,7 +99,11 @@ class LiftHistoryViewSet(viewsets.ModelViewSet):
 
                 if serializer.is_valid():
                     serializer.save()
-                    return Response({'status' : 'ok'}, status = 200)
+                    return Response({
+                        'status' : 'ok',
+                        'data' : serializer.data,
+                        'bell ringer' : serializer.bellRinger
+                        }, status = 200)
                 else:
                     return Response({'error' : serializer.errors}, status=400 )
 
@@ -114,7 +119,6 @@ class LiftHistoryViewSet(viewsets.ModelViewSet):
         serializer = LiftHistorySerializer(queryset, many=True)
 
         return response.Response(serializer.data)
-
 
 class MaxLiftViewSet(viewsets.ModelViewSet):
     queryset = MaxLift.objects.all()

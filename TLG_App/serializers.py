@@ -1,3 +1,4 @@
+from numpy import maximum
 from rest_framework import serializers
 from .models import ImageGallery, Posts, Team, Athlete, MaxLift, LiftHistory
 from django.db.models import Max
@@ -19,6 +20,12 @@ class MaxLiftSerializer(serializers.ModelSerializer):
         model = MaxLift
 
 class LiftHistorySerializer(serializers.ModelSerializer):
+
+    def __init__(self, *args, **kwargs) -> None:
+        super().__init__(*args, **kwargs)
+        self.bellRinger = False
+        
+
     class Meta:
         fields = ('athlete', 'lift', 'weight', 'date_of_lift')
         model = LiftHistory
@@ -27,8 +34,8 @@ class LiftHistorySerializer(serializers.ModelSerializer):
 
         maxLift = self.getMax(validated_data)
         lift, created = LiftHistory.objects.get_or_create(**validated_data)
-        maxObj = self.checkIfNewMax(lift, maxLift)
-        lift.newBR = maxObj
+        self.checkIfNewMax(lift, maxLift)
+
         return lift
 
     def getMax(self, validated_data):
@@ -36,16 +43,29 @@ class LiftHistorySerializer(serializers.ModelSerializer):
         history = LiftHistory.objects.filter(athlete=validated_data['athlete'].id) 
         historyByLift = history.filter(lift=validated_data['lift'])
         maxLift = historyByLift.aggregate(Max('weight'))
+        if maxLift['weight__max'] == None:
+            maxLift['weight__max'] = 0
         return maxLift
 
     def checkIfNewMax(self, lift, maxLift):
-        
+
         if maxLift['weight__max'] < lift.weight:
-            update_values = {'max_lift' : lift}
-            maxObj, created = MaxLift.objects.update_or_create(athlete = lift.athlete, defaults=update_values)
-            return maxObj
+            
+            try:
+                userMaxes = MaxLift.objects.filter(athlete=lift.athlete.pk)
+                userLiftMax = userMaxes.get(max_lift__lift=lift.lift)
+                userLiftMax.max_lift = lift
+                userLiftMax.save()
+                self.bellRinger = True
+                return True
+            
+            except:
+                MaxLift.objects.create(athlete=lift.athlete, max_lift=lift)
+                self.bellRinger = True
+                return True
         else:
-            return None
+            self.bellRinger = False
+            return False
 
 class PostSerializer(serializers.ModelSerializer):
 
@@ -58,4 +78,4 @@ class ImageGallerySerializer(serializers.ModelSerializer):
     class Meta:
         fields = ('author', 'image')
         model = ImageGallery
-     
+    
