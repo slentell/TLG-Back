@@ -117,7 +117,8 @@ class AthleteViewSet(viewsets.ModelViewSet):
 
 
 class LiftHistoryViewSet(viewsets.ModelViewSet):
-    queryset = LiftHistory.objects.all()
+    queryset = LiftHistory.objects.all().order_by('date_of_lift')
+    print('queryset ', list(queryset))
     serializer_class = LiftHistorySerializer
     http_method_names = ['get', 'post', 'options', 'put', 'delete',]
 
@@ -142,7 +143,7 @@ class LiftHistoryViewSet(viewsets.ModelViewSet):
                     serializer.save()
                     return Response({'status' : 'ok'}, status = 200)
                 else:
-                    return Response({'error' : serializer.errors}, status=400 )
+                    return Response({'error' : serializer.errors}, status=400)
 
     def list(self, request):
         print('inside lift')
