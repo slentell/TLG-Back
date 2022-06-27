@@ -187,6 +187,7 @@ DJOSER = {
         'user': 'auth_app.serializer.UserCreateSerializer',
         'current_user': 'auth_app.serializer.UserCreateSerializer',
         'user_delete': 'djoser.serializers.UserDeleteSerializer',
+        'token': 'auth.serializers.StreamTokenSerializer',
     },
 }
 
@@ -209,6 +210,9 @@ CORS_ALLOW_CREDENTIALS = True
 
 SESSION_COOKIE_SAMESITE = None
 
+# Stream Chat API Info
+STREAM_API_KEY = env('STREAM_API_KEY')
+STREAM_API_SECRET = env('STREAM_API_SECRET')
 
 
 django_heroku.settings(locals())

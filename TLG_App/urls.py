@@ -10,6 +10,9 @@ router.register(r'max-lift', MaxLiftViewSet)
 router.register(r'posts', PostsViewSet)
 router.register(r'image-gallery', ImageGalleryViewSet)
 
+
+
+
 urlpatterns = router.urls
 # [
 #     path('test/', test_view),
