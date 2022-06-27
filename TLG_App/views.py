@@ -1,5 +1,6 @@
 from venv import create
 from requests import request
+
 from rest_framework import generics, viewsets, response
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
@@ -63,6 +64,7 @@ class TeamViewSet(viewsets.ModelViewSet):
                 'secondary_color': secondary_color,
                 'gender': gender
             }
+            print(data)
             serializer = serializer_class(data=data, partial=True)
 
             if serializer.is_valid():
@@ -115,6 +117,19 @@ class AthleteViewSet(viewsets.ModelViewSet):
                 return Response({'status' : 'ok'}, status = 200)
             else:
                 return Response({'error' : serializer.errors}, status=400 )
+
+class AthleteByTeamViewSet(viewsets.ViewSet):
+    queryset = Athlete.objects.all()
+    serializer_class = AthleteSerializer
+    http_method_names = ['get', 'post', 'options', 'put', 'delete',]
+
+    def list(self, request):
+        team_id = request.query_params.get('team_id')
+        print(team_id)
+        athletes = Athlete.objects.filter(team=team_id)
+        serializer = AthleteSerializer(athletes, many=True)
+        return Response(serializer.data)
+
 
 
 class LiftHistoryViewSet(viewsets.ModelViewSet):
@@ -171,6 +186,7 @@ class MaxLiftViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         return MaxLift.objects.select_related('max_lift', 'athlete').all()
+
 
 class ImageGalleryViewSet(viewsets.ModelViewSet):
     queryset = ImageGallery.objects.all()

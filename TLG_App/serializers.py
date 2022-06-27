@@ -1,3 +1,4 @@
+from dataclasses import fields
 from numpy import maximum
 from rest_framework import serializers
 from .models import ImageGallery, Posts, Team, Athlete, MaxLift, LiftHistory
@@ -11,9 +12,16 @@ class TeamSerializer(serializers.ModelSerializer):
         model = Team
 
 class AthleteSerializer(serializers.ModelSerializer):
+    athlete = UserCreateSerializer(many=True)
+    team = TeamSerializer()
     class Meta:
         fields = ('athlete', 'grade', 'gender', 'weight', 'dob', 'team', 'weightclass')
         model = Athlete
+
+# class AthleteByTeamSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         fields = ('athlete', 'grade', 'gender', 'weight', 'dob', 'team', 'weightclass')
+#         model = Athlete
 
 
 class LiftHistorySerializer(serializers.ModelSerializer):
@@ -70,6 +78,9 @@ class MaxLiftSerializer(serializers.ModelSerializer):
     class Meta:
         fields = ('athlete', 'max_lift')
         model = MaxLift
+
+
+
 class PostSerializer(serializers.ModelSerializer):
 
     class Meta:
