@@ -12,7 +12,7 @@ class TeamSerializer(serializers.ModelSerializer):
         model = Team
 
 class AthleteSerializer(serializers.ModelSerializer):
-    athlete = UserCreateSerializer(many=True)
+    athlete = UserCreateSerializer(many=False)
     team = TeamSerializer()
     class Meta:
         fields = ('athlete', 'grade', 'gender', 'weight', 'dob', 'team', 'weightclass')
@@ -72,7 +72,7 @@ class LiftHistorySerializer(serializers.ModelSerializer):
             self.bellRinger = False
             return False
 
-class MaxLiftSerializer(serializers.ModelSerializer):
+class MaxLiftByTeamSerializer(serializers.ModelSerializer):
     athlete = UserCreateSerializer()
     max_lift = LiftHistorySerializer()
     class Meta:
