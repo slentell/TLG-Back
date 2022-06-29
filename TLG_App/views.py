@@ -1,18 +1,11 @@
 from venv import create
 from requests import request
-
 from rest_framework import generics, viewsets, response
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import TokenAuthentication
 from .models import ImageGallery, Posts, Team, Athlete, LiftHistory, MaxLift
 from .serializers import ImageGallerySerializer, PostSerializer, TeamSerializer, AthleteSerializer, LiftHistorySerializer, MaxLiftByTeamSerializer
-import json
-
-
-def teamByCoach(coachUserId):
-    team = Team.objects.get(coach=coachUserId)
-    return team
 
 class PostsViewSet(viewsets.ModelViewSet):
     queryset = Posts.objects.all()
@@ -134,7 +127,9 @@ class AthleteByTeamViewSet(viewsets.ViewSet):
 
 
 class LiftHistoryViewSet(viewsets.ModelViewSet):
-    queryset = LiftHistory.objects.all()
+    queryset = LiftHistory.objects.order_by('date_of_lift')
+    # queryset = sorted(LiftHistory.objects.all(), key = lambda x: x.date_of_lift(), reverse = True)
+    print('hopefully sorted queryset ', queryset)
     serializer_class = LiftHistorySerializer
     http_method_names = ['get', 'post', 'options', 'put', 'delete',]
 
@@ -163,7 +158,7 @@ class LiftHistoryViewSet(viewsets.ModelViewSet):
                         'bell ringer' : serializer.bellRinger
                         }, status = 200)
                 else:
-                    return Response({'error' : serializer.errors}, status=400 )
+                    return Response({'error' : serializer.errors}, status=400)
 
     def list(self, request):
         print('inside lift')
@@ -174,7 +169,8 @@ class LiftHistoryViewSet(viewsets.ModelViewSet):
         return response.Response(serializer.data)
 
     def retrieve(self, request, pk):
-        queryset = LiftHistory.objects.filter(athlete__id=pk)
+        print('inside retrieve ')
+        queryset = LiftHistory.objects.filter(athlete__id=pk).order_by('date_of_lift')
         serializer = LiftHistorySerializer(queryset, many=True)
         
         return response.Response(serializer.data)

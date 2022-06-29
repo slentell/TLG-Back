@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from djoser.conf import settings as djoser_settings
-from stream_chat import StreamChat
+# from stream_chat import StreamChat
 from django.conf import settings
 from djoser.serializers import UserCreateSerializer, TokenSerializer
 from django.contrib.auth import get_user_model
