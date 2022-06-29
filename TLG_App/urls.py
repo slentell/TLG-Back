@@ -1,14 +1,15 @@
 from django.urls import path
 from rest_framework import routers
-from .views import ImageGalleryViewSet, TeamViewSet, AthleteViewSet, LiftHistoryViewSet, MaxLiftViewSet, PostsViewSet
+from .views import ImageGalleryViewSet, TeamViewSet, AthleteViewSet, LiftHistoryViewSet, MaxLiftByTeamViewSet, PostsViewSet, AthleteByTeamViewSet
 
 router = routers.DefaultRouter()
 router.register(r'team', TeamViewSet)
 router.register(r'athlete', AthleteViewSet)
 router.register(r'lift-history', LiftHistoryViewSet)
-router.register(r'max-lift', MaxLiftViewSet)
+router.register(r'max-lift-by-team', MaxLiftByTeamViewSet, basename='max-lift-by-team')
 router.register(r'posts', PostsViewSet)
 router.register(r'image-gallery', ImageGalleryViewSet)
+router.register(r'athlete-by-team', AthleteByTeamViewSet, basename='athlete-by-team' )
 
 
 
