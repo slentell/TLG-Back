@@ -1,6 +1,5 @@
 from venv import create
 from requests import request
-
 from rest_framework import generics, viewsets, response
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
@@ -8,7 +7,6 @@ from rest_framework.authentication import TokenAuthentication
 from .models import ImageGallery, Posts, Team, Athlete, LiftHistory, MaxLift
 from .serializers import ImageGallerySerializer, PostSerializer, TeamSerializer, AthleteSerializer, LiftHistorySerializer, MaxLiftSerializer
 import json
-
 class PostsViewSet(viewsets.ModelViewSet):
     queryset = Posts.objects.all()
     serializer_class = PostSerializer
@@ -133,8 +131,9 @@ class AthleteByTeamViewSet(viewsets.ViewSet):
 
 
 class LiftHistoryViewSet(viewsets.ModelViewSet):
-    queryset = LiftHistory.objects.all().order_by('date_of_lift')
-    print('queryset ', list(queryset))
+    queryset = LiftHistory.objects.order_by('date_of_lift')
+    # queryset = sorted(LiftHistory.objects.all(), key = lambda x: x.date_of_lift(), reverse = True)
+    print('hopefully sorted queryset ', queryset)
     serializer_class = LiftHistorySerializer
     http_method_names = ['get', 'post', 'options', 'put', 'delete',]
 
@@ -174,7 +173,8 @@ class LiftHistoryViewSet(viewsets.ModelViewSet):
         return response.Response(serializer.data)
 
     def retrieve(self, request, pk):
-        queryset = LiftHistory.objects.filter(athlete__id=pk)
+        print('inside retrieve ')
+        queryset = LiftHistory.objects.filter(athlete__id=pk).order_by('date_of_lift')
         serializer = LiftHistorySerializer(queryset, many=True)
         
         return response.Response(serializer.data)
