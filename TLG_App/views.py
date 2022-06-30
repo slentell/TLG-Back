@@ -219,6 +219,12 @@ class MaxLiftByTeamViewSet(viewsets.ViewSet):
         
         return response.Response(formatted_data)
 
+class DevinStoleMyShitViewSet(viewsets.ViewSet):
+    def list(self, request):
+        teamId = teamByCoach(request.user.pk)
+        teamLifts = MaxLift.objects.filter(athlete__athlete__team_id=teamId)
+        serializer = MaxLiftByTeamSerializer(teamLifts, many=True)
+        return response.Response(serializer.data)
 
 class ImageGalleryViewSet(viewsets.ModelViewSet):
     queryset = ImageGallery.objects.all()
