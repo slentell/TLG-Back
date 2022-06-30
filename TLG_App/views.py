@@ -1,11 +1,18 @@
 from venv import create
 from requests import request
+
 from rest_framework import generics, viewsets, response
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import TokenAuthentication
 from .models import ImageGallery, Posts, Team, Athlete, LiftHistory, MaxLift
 from .serializers import ImageGallerySerializer, PostSerializer, TeamSerializer, AthleteSerializer, LiftHistorySerializer, MaxLiftByTeamSerializer
+import json
+
+
+def teamByCoach(coachUserId):
+    team = Team.objects.get(coach=coachUserId)
+    return team
 
 class PostsViewSet(viewsets.ModelViewSet):
     queryset = Posts.objects.all()
@@ -127,9 +134,7 @@ class AthleteByTeamViewSet(viewsets.ViewSet):
 
 
 class LiftHistoryViewSet(viewsets.ModelViewSet):
-    queryset = LiftHistory.objects.order_by('date_of_lift')
-    # queryset = sorted(LiftHistory.objects.all(), key = lambda x: x.date_of_lift(), reverse = True)
-    print('hopefully sorted queryset ', queryset)
+    queryset = LiftHistory.objects.all()
     serializer_class = LiftHistorySerializer
     http_method_names = ['get', 'post', 'options', 'put', 'delete',]
 
@@ -148,7 +153,9 @@ class LiftHistoryViewSet(viewsets.ModelViewSet):
                     'weight': weight,
                     'date_of_lift': date_of_lift,
                 }
+              
                 serializer = serializer_class(data=data, partial=True)
+                print(serializer)
 
                 if serializer.is_valid():
                     serializer.save()
@@ -158,7 +165,7 @@ class LiftHistoryViewSet(viewsets.ModelViewSet):
                         'bell ringer' : serializer.bellRinger
                         }, status = 200)
                 else:
-                    return Response({'error' : serializer.errors}, status=400)
+                    return Response({'error' : serializer.errors}, status=400 )
 
     def list(self, request):
         print('inside lift')
@@ -169,8 +176,7 @@ class LiftHistoryViewSet(viewsets.ModelViewSet):
         return response.Response(serializer.data)
 
     def retrieve(self, request, pk):
-        print('inside retrieve ')
-        queryset = LiftHistory.objects.filter(athlete__id=pk).order_by('date_of_lift')
+        queryset = LiftHistory.objects.filter(athlete__id=pk)
         serializer = LiftHistorySerializer(queryset, many=True)
         
         return response.Response(serializer.data)
@@ -181,7 +187,7 @@ class MaxLiftByTeamViewSet(viewsets.ViewSet):
         teamId = teamByCoach(request.user.pk)
         teamLifts = MaxLift.objects.filter(athlete__athlete__team_id=teamId).order_by('id')
         serializer = MaxLiftByTeamSerializer(teamLifts, many=True)
-        print(serializer.data[0])
+
 
         formatted_data = []
 
