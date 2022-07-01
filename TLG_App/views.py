@@ -221,7 +221,13 @@ class MaxLiftByTeamViewSet(viewsets.ViewSet):
 
 class DevinStoleMyShitViewSet(viewsets.ViewSet):
     def list(self, request):
-        teamId = teamByCoach(request.user.pk)
+        try:
+            teamId = teamByCoach(request.user.pk)
+            print(teamId)
+        except:
+            athleteObj = Athlete.object.get(athlete=request.user.pk)
+            teamId = athleteObj.team
+            print(teamId)
         teamLifts = MaxLift.objects.filter(athlete__athlete__team_id=teamId)
         serializer = MaxLiftByTeamSerializer(teamLifts, many=True)
         return response.Response(serializer.data)
