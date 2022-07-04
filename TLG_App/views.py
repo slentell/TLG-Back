@@ -8,7 +8,10 @@ from rest_framework.authentication import TokenAuthentication
 from .models import ImageGallery, Posts, Team, Athlete, LiftHistory, MaxLift
 from .serializers import ImageGallerySerializer, PostSerializer, TeamSerializer, AthleteSerializer, LiftHistorySerializer, MaxLiftByTeamSerializer
 import json
-
+# def coachByAthlete(athleteUserId):
+#     # print(athleteUserId)
+#     athlete = Athlete.objects.get(athlete=athleteUserId)
+#     return athlete.team.coach
 
 def teamByCoach(coachUserId):
     team = Team.objects.get(coach=coachUserId)
@@ -185,7 +188,13 @@ class LiftHistoryViewSet(viewsets.ModelViewSet):
 class MaxLiftByTeamViewSet(viewsets.ViewSet):
 
     def list(self, request):
-        teamId = teamByCoach(request.user.pk)
+        try:
+            teamId = teamByCoach(request.user.pk)
+            print(teamId)
+        except:
+            athleteObj = Athlete.objects.get(athlete=request.user.pk)
+            teamId = athleteObj.team_id
+            print(teamId)
         teamLifts = MaxLift.objects.filter(athlete__athlete__team_id=teamId).order_by('id')
         serializer = MaxLiftByTeamSerializer(teamLifts, many=True)
 
@@ -226,7 +235,7 @@ class DevinStoleMyShitViewSet(viewsets.ViewSet):
             teamId = teamByCoach(request.user.pk)
             print(teamId)
         except:
-            athleteObj = Athlete.object.get(athlete=request.user.pk)
+            athleteObj = Athlete.objects.get(athlete=request.user.pk)
             teamId = athleteObj.team
             print(teamId)
         teamLifts = MaxLift.objects.filter(athlete__athlete__team_id=teamId)
