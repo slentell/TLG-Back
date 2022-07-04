@@ -45,12 +45,13 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'corsheaders',
     'rest_framework',
-    'djoser',
     'social_django',
     'rest_framework_simplejwt',
     'rest_framework_simplejwt.token_blacklist',
+    'rest_framework.authtoken',
     'TLG_App',
-    'auth_app'
+    'auth_app',
+    'djoser',
 ]
 
 MIDDLEWARE = [
@@ -163,7 +164,7 @@ AUTHENTICATION_BACKENDS = (
 
 SIMPLE_JWT = {
    'AUTH_HEADER_TYPES': ('JWT',),
-   'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
+   'ACCESS_TOKEN_LIFETIME': timedelta(days=60),
    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
    'AUTH_TOKEN_CLASSES': (
         'rest_framework_simplejwt.tokens.AccessToken',
@@ -187,7 +188,7 @@ DJOSER = {
         'user': 'auth_app.serializer.UserCreateSerializer',
         'current_user': 'auth_app.serializer.UserCreateSerializer',
         'user_delete': 'djoser.serializers.UserDeleteSerializer',
-        'token': 'auth.serializers.StreamTokenSerializer',
+        'token': 'auth_app.serializer.StreamTokenSerializer',
     },
 }
 
@@ -211,8 +212,8 @@ CORS_ALLOW_CREDENTIALS = True
 SESSION_COOKIE_SAMESITE = None
 
 # Stream Chat API Info
-# STREAM_API_KEY = env('STREAM_API_KEY')
-# STREAM_API_SECRET = env('STREAM_API_SECRET')
+STREAM_API_KEY = env('STREAM_API_KEY')
+STREAM_API_SECRET = env('STREAM_API_SECRET')
 
 
 django_heroku.settings(locals())
