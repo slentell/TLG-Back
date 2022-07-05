@@ -8,10 +8,6 @@ from rest_framework.authentication import TokenAuthentication
 from .models import ImageGallery, Posts, Team, Athlete, LiftHistory, MaxLift
 from .serializers import ImageGallerySerializer, PostSerializer, TeamSerializer, AthleteSerializer, LiftHistorySerializer, MaxLiftByTeamSerializer
 import json
-# def coachByAthlete(athleteUserId):
-#     # print(athleteUserId)
-#     athlete = Athlete.objects.get(athlete=athleteUserId)
-#     return athlete.team.coach
 
 def teamByCoach(coachUserId):
     team = Team.objects.get(coach=coachUserId)
@@ -268,11 +264,4 @@ class ImageGalleryViewSet(viewsets.ModelViewSet):
                 return Response({'status' : 'ok'}, status = 200)
             else:
                 return Response({'error' : serializer.errors}, status=400 )
-
-# class PostsViewSet(viewsets.ModelViewSet):
-#     queryset = Posts.objects.all()
-#     serializer_class = PostSerializer
-#     http_method_names = ['get', 'post', 'options', 'put','delete',]
-
-
 
