@@ -172,6 +172,7 @@ SIMPLE_JWT = {
 }
 
 DOMAIN = ('localhost:3000')
+SITE_NAME = ('Through The Lifting Glass')
 DJOSER = {
     'LOGIN_FIELD': 'email',
     'USER_CREATE_PASSWORD_RETYPE': True,
