@@ -174,12 +174,30 @@ class LiftHistoryViewSet(viewsets.ModelViewSet):
         return response.Response(serializer.data)
 
     def retrieve(self, request, pk):
-
+        print('inside retrieve ')
         queryset = LiftHistory.objects.filter(athlete__id=pk).order_by('date_of_lift')
-
         serializer = LiftHistorySerializer(queryset, many=True)
-        
         return response.Response(serializer.data)
+
+    def update(self, request, pk=None):
+        print('inside update view', request.data, pk)
+        print('id ', request.data.get('id'))
+        liftQuery = LiftHistory.objects.filter(athlete__id=pk).get(id=request.data.get('id'))
+        print('liftQuery', liftQuery)
+        # liftQuery = LiftHistory.objects.filter(athlete__id=pk).get(id=request.data.get('id'))
+        data = {
+            'athlete': pk,
+            'lift': request.data.get('lift'),
+            'weight': request.data.get('weight'),
+            'date_of_lift': request.data.get('date_of_lift'),
+        }
+        serializer = LiftHistorySerializer(liftQuery, data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return response.Response(serializer.data)
+        else:
+            return Response({'error' : serializer.errors}, status=400 )
+
 
 class MaxLiftByTeamViewSet(viewsets.ViewSet):
 

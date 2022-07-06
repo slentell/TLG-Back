@@ -32,16 +32,28 @@ class LiftHistorySerializer(serializers.ModelSerializer):
         
 
     class Meta:
-        fields = ('athlete', 'lift', 'weight', 'date_of_lift')
+        fields = ('id', 'athlete', 'lift', 'weight', 'date_of_lift')
         model = LiftHistory
         
     def create(self, validated_data):
-
+        print('inside create')
         maxLift = self.getMax(validated_data)
         lift, created = LiftHistory.objects.get_or_create(**validated_data)
         self.checkIfNewMax(lift, maxLift)
 
         return lift
+        
+    def update(self, instance, validated_data):
+        print('inside serializer update', instance)
+        print('validated data', validated_data)
+        print('instance id ', instance.id)
+        instance.id = validated_data.get('id', instance.id)
+        instance.athlete = validated_data.get('athlete', instance.athlete)
+        instance.lift = validated_data.get('lift', instance.lift)
+        instance.date_of_lift = validated_data.get('date_of_lift', instance.date_of_lift)
+        instance.weight = validated_data.get('weight', instance.weight)
+        instance.save()
+        return instance
 
     def getMax(self, validated_data):
 
