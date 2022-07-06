@@ -14,6 +14,7 @@ from datetime import timedelta
 from pathlib import Path
 import environ
 import django_heroku
+import os
 
 # Initialise environment variables
 env = environ.Env()
@@ -71,7 +72,7 @@ ROOT_URLCONF = 'TLG_Project.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -174,6 +175,9 @@ SIMPLE_JWT = {
 DOMAIN = ('localhost:3000')
 SITE_NAME = ('Through The Lifting Glass')
 DJOSER = {
+    'EMAIL': {
+            'activation': 'core.email.ActivationEmail'
+    },
     'LOGIN_FIELD': 'email',
     'USER_CREATE_PASSWORD_RETYPE': True,
     'PASSWORD_CHANGED_EMAIL_CONFIRMATION': True,
