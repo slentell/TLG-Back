@@ -182,8 +182,8 @@ class LiftHistoryViewSet(viewsets.ModelViewSet):
     def update(self, request, pk=None):
         print('inside update view', request.data, pk)
         print('id ', request.data.get('id'))
-        liftQuery = LiftHistory.objects.filter(athlete__id=pk).get(id=request.data.get('id'))
-        print('liftQuery', liftQuery)
+        lift_query = LiftHistory.objects.filter(athlete__id=pk).get(id=request.data.get('id'))
+        print('liftQuery', lift_query)
         # liftQuery = LiftHistory.objects.filter(athlete__id=pk).get(id=request.data.get('id'))
         data = {
             'athlete': pk,
@@ -191,12 +191,21 @@ class LiftHistoryViewSet(viewsets.ModelViewSet):
             'weight': request.data.get('weight'),
             'date_of_lift': request.data.get('date_of_lift'),
         }
-        serializer = LiftHistorySerializer(liftQuery, data=data)
+        serializer = LiftHistorySerializer(lift_query, data=data)
         if serializer.is_valid():
             serializer.save()
             return response.Response(serializer.data)
         else:
             return Response({'error' : serializer.errors}, status=400 )
+    
+    def destroy(self, request, pk=None):
+        print('inside delete view')
+        if request.method == 'DELETE':
+            lift_object = LiftHistory.objects.filter(athlete__id=pk).get(id=request.data.get('id'))
+            lift_object.delete()
+            return Response({'status' : 'ok'}, status=200)
+        else:
+            return Response({'error' : 'error deleting'}, status=400)
 
 
 class MaxLiftByTeamViewSet(viewsets.ViewSet):
