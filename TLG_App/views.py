@@ -5,8 +5,8 @@ from rest_framework import generics, viewsets, response
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import TokenAuthentication
-from .models import ImageGallery, Posts, Team, Athlete, LiftHistory, MaxLift
-from .serializers import ImageGallerySerializer, PostSerializer, TeamSerializer, AthleteSerializer, LiftHistorySerializer, MaxLiftByTeamSerializer
+from .models import ImageGallery, Posts, Team, Athlete, LiftHistory, MaxLift, Calendar
+from .serializers import ImageGallerySerializer, PostSerializer, TeamSerializer, AthleteSerializer, LiftHistorySerializer, MaxLiftByTeamSerializer, CalendarSerializer
 import json
 
 def teamByCoach(coachUserId):
@@ -283,3 +283,42 @@ class ImageGalleryViewSet(viewsets.ModelViewSet):
             else:
                 return Response({'error' : serializer.errors}, status=400 )
 
+def getTeamId(request):
+    try:
+        teamId = teamByCoach(request.user.pk)
+        
+    except:
+        athleteObj = Athlete.objects.get(athlete=request.user.pk)
+        teamId = athleteObj.team
+        
+    return teamId
+
+class CalendarViewSet(viewsets.ModelViewSet):
+
+    queryset = Calendar.objects.all()
+    serializer_class = CalendarSerializer
+
+    def list(self, request):
+        teamId = getTeamId(request)
+        teamCalendarEvents = Calendar.objects.filter(team=teamId)
+        serializer = CalendarSerializer(teamCalendarEvents, many=True)
+        return response.Response(serializer.data)
+
+    def create(self, request):
+        teamId = getTeamId(request)
+        title = request.data.get('title')
+        start = request.data.get('start')
+        end = request.data.get('end')
+        color = request.data.get('color')
+        content = request.data.get('content')
+        data = {
+            'title': title,
+            'start': start,
+            'end': end,
+            'color': color,
+            'content': content,
+            'team': teamId,
+        }
+
+        serializer = CalendarSerializer(data=data, partial=True)
+        return response.Response(serializer.data)

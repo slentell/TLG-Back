@@ -17,7 +17,6 @@ class Team(models.Model):
     primary_color = models.CharField(max_length=255)
     secondary_color = models.CharField(max_length=255)
     gender = models.CharField(max_length=5, choices=GENDER_CHOICES)
-    
 
 class Athlete(models.Model):
     # Choice Lists
@@ -93,9 +92,6 @@ class Athlete(models.Model):
     team = models.ForeignKey(Team, on_delete=models.CASCADE, related_name='teammates', null=True)
     weightclass = models.CharField(max_length=255) 
 
-
-
-
 # Future DB for Lift DB for building/logging workout
 # class Lifts:
 #     pass
@@ -121,7 +117,15 @@ class Posts(models.Model):
     def __str__(self):
         return self.title
 
-
 class ImageGallery(models.Model):
     author = models.ForeignKey(UserAccount, on_delete=models.CASCADE)
     image = models.ImageField(upload_to='image_gallery')
+
+class Calendar(models.Model):
+
+    team = models.ForeignKey(Team, on_delete=models.CASCADE, related_name='team')
+    title = models.CharField(max_length=255)
+    start = models.DateTimeField()
+    end = models.DateTimeField()
+    color = models.CharField(max_length=100)
+    content = models.TextField(blank=True, null=True)

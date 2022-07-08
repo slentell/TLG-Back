@@ -1,7 +1,7 @@
 from dataclasses import fields
 from numpy import maximum
 from rest_framework import serializers
-from .models import ImageGallery, Posts, Team, Athlete, MaxLift, LiftHistory
+from .models import Calendar, ImageGallery, Posts, Team, Athlete, MaxLift, LiftHistory
 from django.db.models import Max
 from auth_app.models import UserAccount
 from auth_app.serializer import UserCreateSerializer
@@ -105,3 +105,8 @@ class ImageGallerySerializer(serializers.ModelSerializer):
         fields = ('author', 'image')
         model = ImageGallery
     
+class CalendarSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        fields = ('id', 'title', 'start', 'end', 'color', 'content', 'team')
+        model = Calendar
