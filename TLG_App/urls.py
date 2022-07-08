@@ -1,6 +1,6 @@
 from django.urls import path
 from rest_framework import routers
-from .views import ImageGalleryViewSet, TeamViewSet, AthleteViewSet, LiftHistoryViewSet, MaxLiftByTeamViewSet, PostsViewSet, AthleteByTeamViewSet, DevinStoleMyShitViewSet
+from .views import CalendarViewSet, ImageGalleryViewSet, TeamViewSet, AthleteViewSet, LiftHistoryViewSet, MaxLiftByTeamViewSet, PostsViewSet, AthleteByTeamViewSet, DevinStoleMyShitViewSet
 
 router = routers.DefaultRouter()
 router.register(r'team', TeamViewSet)
@@ -12,6 +12,7 @@ router.register(r'image-gallery', ImageGalleryViewSet),
 router.register(r'athlete-by-team', AthleteByTeamViewSet, 
 basename='athlete-by-team' )
 router.register(r'bell-ringer-by-team', DevinStoleMyShitViewSet, basename='bell-ringer-by-team'), 
+router.register(r'calendar', CalendarViewSet), 
 
 
 
