@@ -12,16 +12,16 @@ class TeamSerializer(serializers.ModelSerializer):
         model = Team
 
 class AthleteSerializer(serializers.ModelSerializer):
-    athlete = UserCreateSerializer(many=False)
-    team = TeamSerializer()
     class Meta:
         fields = ('athlete', 'grade', 'gender', 'weight', 'dob', 'team', 'weightclass')
         model = Athlete
 
-# class AthleteByTeamSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         fields = ('athlete', 'grade', 'gender', 'weight', 'dob', 'team', 'weightclass')
-#         model = Athlete
+class AthleteByTeamSerializer(serializers.ModelSerializer):
+    athlete = UserCreateSerializer(many=False)
+    team = TeamSerializer(many=False)
+    class Meta:
+        fields = ('athlete', 'grade', 'gender', 'weight', 'dob', 'team', 'weightclass')
+        model = Athlete
 
 
 class LiftHistorySerializer(serializers.ModelSerializer):

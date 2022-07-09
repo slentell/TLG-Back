@@ -125,7 +125,7 @@ class Calendar(models.Model):
 
     team = models.ForeignKey(Team, on_delete=models.CASCADE, related_name='team')
     title = models.CharField(max_length=255)
-    start = models.DateTimeField()
-    end = models.DateTimeField()
+    start = models.DateField()
+    end = models.DateField()
     color = models.CharField(max_length=100)
     content = models.TextField(blank=True, null=True)

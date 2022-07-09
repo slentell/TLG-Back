@@ -6,7 +6,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import TokenAuthentication
 from .models import ImageGallery, Posts, Team, Athlete, LiftHistory, MaxLift, Calendar
-from .serializers import ImageGallerySerializer, PostSerializer, TeamSerializer, AthleteSerializer, LiftHistorySerializer, MaxLiftByTeamSerializer, CalendarSerializer
+from .serializers import AthleteByTeamSerializer, ImageGallerySerializer, PostSerializer, TeamSerializer, AthleteSerializer, LiftHistorySerializer, MaxLiftByTeamSerializer, CalendarSerializer
 import json
 
 def teamByCoach(coachUserId):
@@ -93,7 +93,10 @@ class AthleteViewSet(viewsets.ModelViewSet):
 
         if self.request.method == "POST":
             print("I'm here")
+            print(self.request.user.pk)
+            print(type(self.request.user.pk))
             athlete = self.request.user.pk
+
             grade = request.data.get('grade')
             gender = request.data.get('gender')
             dob = request.data.get('dob')
@@ -110,7 +113,7 @@ class AthleteViewSet(viewsets.ModelViewSet):
                 'weightclass': weightclass,
                 'team': team_id
             }
-            print(data)
+            print('data:',data)
 
             serializer = serializer_class(data=data, partial=True)
             print("got serialized")
@@ -128,7 +131,7 @@ class AthleteByTeamViewSet(viewsets.ViewSet):
 
         team_id = teamByCoach(request.user.pk)
         athletes = Athlete.objects.filter(team=team_id)
-        serializer = AthleteSerializer(athletes, many=True)
+        serializer = AthleteByTeamSerializer(athletes, many=True)
         return Response(serializer.data)
 
 
@@ -152,7 +155,7 @@ class LiftHistoryViewSet(viewsets.ModelViewSet):
                     'weight': weight,
                     'date_of_lift': date_of_lift,
                 }
-              
+            
                 serializer = serializer_class(data=data, partial=True)
                 print(serializer)
 
@@ -315,19 +318,31 @@ class CalendarViewSet(viewsets.ModelViewSet):
 
     def create(self, request):
         teamId = getTeamId(request)
-        title = request.data.get('title')
-        start = request.data.get('start')
-        end = request.data.get('end')
-        color = request.data.get('color')
-        content = request.data.get('content')
+        print(teamId)
+        # print(request.data)
+        # print(request.data['data'].get('title'))
+        title = request.data['data'].get('title')
+        start = request.data['data'].get('start')
+        end = request.data['data'].get('end')
+        color = request.data['data'].get('color')
+        content = request.data['data'].get('content')
         data = {
             'title': title,
             'start': start,
             'end': end,
             'color': color,
             'content': content,
-            'team': teamId,
+            'team': teamId.pk
         }
+        print(data)
 
-        serializer = CalendarSerializer(data=data, partial=True)
-        return response.Response(serializer.data)
+        serializer = CalendarSerializer(data=data)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response({
+                'status' : 'ok',
+                # 'data': Calendar.objects.filter(team=teamId)
+                }, status = 200)
+        else:
+            return Response({'error' : serializer.errors}, status=400 )
