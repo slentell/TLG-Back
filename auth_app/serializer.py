@@ -9,7 +9,7 @@ User = get_user_model()
 class UserCreateSerializer(UserCreateSerializer):
     class Meta(UserCreateSerializer.Meta):
         model = User
-        fields = ('id', 'email', 'first_name', 'last_name', 'password', 'account_type', 'profile_picture')
+        fields = ('id', 'email', 'first_name', 'last_name', 'password', 'account_type')
         
 
 class StreamTokenSerializer(TokenSerializer):

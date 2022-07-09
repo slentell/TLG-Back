@@ -125,6 +125,14 @@ class AthleteViewSet(viewsets.ModelViewSet):
             else:
                 return Response({'error' : serializer.errors}, status=400 )
 
+    def retrieve(self, request, pk):
+        print('inside retrieve')
+        queryset = Athlete.objects.get(athlete__id=pk)
+        print('queryset ', queryset)
+        serializer = AthleteByTeamSerializer(queryset, many=False)
+        print('serialized ', serializer)
+        return response.Response(serializer.data)
+
 class AthleteByTeamViewSet(viewsets.ViewSet):
 
     def list(self, request):
@@ -133,7 +141,6 @@ class AthleteByTeamViewSet(viewsets.ViewSet):
         athletes = Athlete.objects.filter(team=team_id)
         serializer = AthleteByTeamSerializer(athletes, many=True)
         return Response(serializer.data)
-
 
 class LiftHistoryViewSet(viewsets.ModelViewSet):
     queryset = LiftHistory.objects.all()
