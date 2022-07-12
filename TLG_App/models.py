@@ -91,6 +91,7 @@ class Athlete(models.Model):
     dob = models.DateField()
     team = models.ForeignKey(Team, on_delete=models.CASCADE, related_name='teammates', null=True)
     weightclass = models.CharField(max_length=255) 
+    profile_picture = models.ImageField(upload_to='profile_pictures/', null=True)
 
 # Future DB for Lift DB for building/logging workout
 # class Lifts:
