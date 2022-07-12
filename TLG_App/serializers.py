@@ -13,8 +13,20 @@ class TeamSerializer(serializers.ModelSerializer):
 
 class AthleteSerializer(serializers.ModelSerializer):
     class Meta:
-        fields = ('athlete', 'grade', 'gender', 'weight', 'dob', 'team', 'weightclass', 'profile_picture')
+        fields = ('id','athlete', 'grade', 'gender', 'weight', 'dob', 'team', 'weightclass')
+
         model = Athlete
+
+        def update(self, instance, validated_data):
+            instance.id = validated_data.get('id', instance.id)
+            instance.athlete = validated_data.get('athlete', instance.athlete)
+            instance.grade = validated_data.get('grade', instance.grade)
+            instance.gender = validated_data.get('gender', instance.gender)
+            instance.weight = validated_data.get('weight', instance.weight)
+            instance.dob = validated_data.get('dob', instance.dob)
+            instance.weightclass = validated_data.get('weightclass', instance.weightclass)
+            instance.save()
+            return instance
 
 class AthleteByTeamSerializer(serializers.ModelSerializer):
     athlete = UserCreateSerializer(many=False)

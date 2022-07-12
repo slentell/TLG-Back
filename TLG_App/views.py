@@ -125,6 +125,43 @@ class AthleteViewSet(viewsets.ModelViewSet):
             else:
                 return Response({'error' : serializer.errors}, status=400 )
 
+
+    def update(self, request, pk):
+            print("I'm putting here")
+            print(pk)
+            print(type(pk))
+            athlete_query = Athlete.objects.get(athlete=self.request.user.pk)
+          
+            athlete = self.request.user.pk
+
+            grade = request.data.get('grade')
+            gender = request.data.get('gender')
+            dob = request.data.get('dob')
+            weight = request.data.get('weight')
+            team_id = request.data.get('team')
+            weightclass = Athlete.return_weightclass(gender=gender, weight_input=weight)
+
+            data = {
+                'athlete' : athlete,
+                'grade': grade,
+                'gender': gender,
+                'dob': dob,
+                'weight': weight,
+                'weightclass': weightclass,
+                'team': team_id
+            }
+            print('data:',data)
+
+            serializer = AthleteSerializer(athlete_query, data=data)
+            print("got serialized")
+            if serializer.is_valid():
+
+                print("is valid")
+                serializer.save()
+                return Response({'status' : 'ok'}, status = 200)
+            else:
+                return Response({'error' : serializer.errors}, status=400 )
+
     def retrieve(self, request, pk):
         print('inside retrieve')
         queryset = Athlete.objects.get(athlete__id=pk)
@@ -132,6 +169,7 @@ class AthleteViewSet(viewsets.ModelViewSet):
         serializer = AthleteByTeamSerializer(queryset, many=False)
         print('serialized ', serializer)
         return response.Response(serializer.data)
+
 
 class AthleteByTeamViewSet(viewsets.ViewSet):
 
